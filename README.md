@@ -22,9 +22,24 @@ Bu proje, bir Discord sunucusundaki ses kanallarını yönetmek ve kullanıcıla
 Projeyi kendi ortamınızda çalıştırmak için aşağıdaki adımları izleyebilirsiniz.
 
 ### 1. Depoyu Klonlayın
+İlk olarak GitHub deposunu bilgisayarınıza indirin ve oluşturulan proje klasörünün içine girin:
 ```bash
-git clone [https://github.com/](https://github.com/)[kullanici-adiniz]/[depo-adiniz].git
-cd [depo-adiniz]
+git clone https://github.com/erenenenn/Discord-music-bot.git
+```
+### 2. Gerekli Kütüphaneleri Yükleyin
+Botun özellikleri için gereken yapıları kurun:
+```bash
 pip install -r requirements.txt
+```
+
+### 3. Token Bilgisini Ayarlayın
+Botunuzun Discord ile iletişim kurabilmesi için gizli token'ınızı içeren bir `.env` dosyası oluşturun:
+```bash
 echo "DISCORD_TOKEN=sizin_gizli_token_bilginiz_buraya" > .env
+```
+
+### 4. Botu Başlatın
+Tüm kurulumlar tamamlandıktan sonra botu çalıştırın:
+```bash
 python3 main.py
+```
