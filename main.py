@@ -129,7 +129,6 @@ async def queue(interaction: discord.Interaction):
 
     queue_list = ""
     for index, song in enumerate(song_queues[guild_id]):
-        # Add 1 to the index so the list starts at 1 instead of 0
         queue_list += f"{index + 1}. {song['title']}\n"
 
     embed = discord.Embed(title="Current Queue", description=queue_list, color=discord.Color.blue())
