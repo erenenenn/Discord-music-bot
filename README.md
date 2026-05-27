@@ -22,5 +22,9 @@ Bu proje, bir Discord sunucusundaki ses kanallarını yönetmek ve kullanıcıla
 Projeyi kendi ortamınızda veya bir sunucuda (örn: Linux/VirtualBox) ayağa kaldırmak için aşağıdaki adımları izleyebilirsiniz.
 
 ### 1. Depoyu Klonlayın
-```bash
-git clone 
+``bash
+git clone https://github.com/erenenenn/Discord-music-bot.git
+
+### 2. Gerekli Kütüphaneleri Yükleyin
+``bash
+pip install -r requirements.txt
