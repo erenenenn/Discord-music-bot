@@ -33,7 +33,7 @@ pip install -r requirements.txt
 ```
 
 ### 3. Token Bilgisini Ayarlayın
-Botunuzun Discord ile iletişim kurabilmesi için gizli token'ınızı içeren bir `.env` dosyası oluşturun:
+Botunuzun Discord ile iletişim kurabilmesi için Discord'dan aldığınız gizli token'ınızı içeren bir `.env` dosyası oluşturun:
 ```bash
 echo "DISCORD_TOKEN=sizin_gizli_token_bilginiz_buraya" > .env
 ```
