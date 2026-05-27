@@ -57,17 +57,13 @@ async def on_ready():
 def check_queue(interaction: discord.Interaction, voice_client: discord.VoiceClient):
     guild_id = interaction.guild.id
 
-    # If there is a queue for this server and it has songs in it...
     if guild_id in song_queues and len(song_queues[guild_id]) > 0:
-        # Pop the first song off the list
         next_song = song_queues[guild_id].pop(0)
         
         player = discord.FFmpegPCMAudio(next_song['url'], **ffmpeg_options)
         
-        # Play the audio, and when it finishes, run this exact function again!
         voice_client.play(player, after=lambda e: check_queue(interaction, voice_client))
 
-        # Safely send a message to the text channel from the synchronous 'after' thread
         coro = interaction.channel.send(f"▶️ Up next from queue: **{next_song['title']}**", view=MusicControls())
         asyncio.run_coroutine_threadsafe(coro, bot.loop)
 
@@ -94,25 +90,20 @@ async def play(interaction: discord.Interaction, search: str):
     song_url = data['url']
     song_title = data['title']
 
-    # ... (keep the top part of your play command the same, up to getting the url and title)
     song_url = data['url']
     song_title = data['title']
     guild_id = interaction.guild.id
 
-    # Create an empty queue for this server if it doesn't exist yet
     if guild_id not in song_queues:
         song_queues[guild_id] = []
 
     if not voice_client.is_playing() and not voice_client.is_paused():
-        # If nothing is playing, play it immediately
         player = discord.FFmpegPCMAudio(song_url, **ffmpeg_options)
         
-        # Attach the check_queue function to the 'after' parameter
         voice_client.play(player, after=lambda e: check_queue(interaction, voice_client))
         
         await interaction.followup.send(f"▶️ Now playing: **{song_title}**", view=MusicControls())
     else:
-        # If music is already playing, add the song dictionary to the queue list
         song_queues[guild_id].append({'url': song_url, 'title': song_title})
         await interaction.followup.send(f"✅ Added to queue: **{song_title}** (Position: {len(song_queues[guild_id])})")
 
@@ -124,8 +115,6 @@ async def skip(interaction: discord.Interaction):
         await interaction.response.send_message("There is no music playing right now.", ephemeral=True)
         return
 
-    # Forcefully stop the audio. 
-    # This automatically triggers our 'check_queue' function to play the next song!
     voice_client.stop()
     await interaction.response.send_message("⏭️ Song skipped!")
 
@@ -134,18 +123,15 @@ async def skip(interaction: discord.Interaction):
 async def queue(interaction: discord.Interaction):
     guild_id = interaction.guild.id
 
-    # Check if the queue exists and actually has songs in it
     if guild_id not in song_queues or len(song_queues[guild_id]) == 0:
         await interaction.response.send_message("The queue is currently empty.", ephemeral=True)
         return
 
-    # Format the queue list into a nice string
     queue_list = ""
     for index, song in enumerate(song_queues[guild_id]):
         # Add 1 to the index so the list starts at 1 instead of 0
         queue_list += f"{index + 1}. {song['title']}\n"
 
-    # Send an embedded message to make it look clean
     embed = discord.Embed(title="Current Queue", description=queue_list, color=discord.Color.blue())
     await interaction.response.send_message(embed=embed)
 
@@ -164,14 +150,13 @@ async def exit(interaction: discord.Interaction):
     if voice_client.is_playing() or voice_client.is_paused():
         voice_client.stop()
 
-        await voice_client.disconnect()
+    await voice_client.disconnect()
 
-    await interaction.response.send_message("I've exited the voice channel.")
+    await interaction.response.send_message("Cleared the queue and left the voice channel")
 
 
 @bot.event
 async def on_voice_state_update(member, before, after):
-    # If the bot itself was disconnected
     if member == bot.user and after.channel is None:
         guild_id = member.guild.id
         song_queues.pop(guild_id, None)
